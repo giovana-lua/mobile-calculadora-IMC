@@ -16,6 +16,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -76,6 +77,20 @@ class MainActivity : ComponentActivity() {
 fun CalculadoraIMCScreen(modifier: Modifier = Modifier) {
     Column(modifier = Modifier.fillMaxSize()) {
         //header
+        var altura by remember {
+            mutableStateOf("")
+        }
+
+        var peso by remember {
+            mutableStateOf("")
+        }
+
+        var imc by remember {
+            mutableDoubleStateOf( 0.0)
+        }
+
+
+
         Column(
             modifier = Modifier.fillMaxWidth()
                 .height(160.dp)
@@ -121,34 +136,7 @@ fun CalculadoraIMCScreen(modifier: Modifier = Modifier) {
                         .fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    var altura by remember {
-                        mutableStateOf("")
-                    }
 
-                    var peso by remember {
-                        mutableStateOf("")
-                    }
-
-                    var imc by remember {
-                        mutableDoubleStateOf( 0.0)
-                    }
-
-                    fun calcularIMC (altura: Double, peso: Double): Double{
-                        var alturaMetros = altura / 100
-
-                        var resultado = peso / (alturaMetros * alturaMetros)
-
-                        return resultado
-                    }
-
-                    var classificacao = when {
-                        imc in 0.0..18.4 -> "abaixo do peso"
-                        imc in 18.5..24.9 -> "peso ideal"
-                        imc in 25.0..29.9 -> "sobre peso"
-                        imc in 30.0..34.9 -> "obesidade 1"
-                        imc in 35.0..39.9 -> "obesidade 2"
-                        else -> "obesidade 3"
-                    }
 
                     Text(
                         modifier = Modifier
@@ -223,32 +211,39 @@ fun CalculadoraIMCScreen(modifier: Modifier = Modifier) {
                 }// fecha coluna dos componentes
             }// fecha o card
 
-            Row(
+            Card (
                 modifier = Modifier
-                    .width(340.dp)
-                    .height(60.dp)
-                    .background(Color(62, 133, 77, 255)),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically,
+                    .fillMaxWidth()
+                    .height(60.dp),
+
+                colors = CardDefaults.cardColors(
+                    containerColor = definirCorCategoria(imc)
+                ),
 
 
 
+
+            ) {  Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+               verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceAround
             ) {
 
-                    Text(
-                        modifier = Modifier
-                            .offset(x = (-10).dp),
-                        text = "%.1f".format(),
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
+                Text(text = "%.1f".format(imc),
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
 
-                    )
+                )
+                Spacer(modifier = Modifier.width(20.dp))
+                Text(
+                    text = definirCategoria(imc),
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
 
-                    Text(
-                        text = ,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
-                    )
+            }
+
             }
 
         }// fecha coluna dos campos
